@@ -1,7 +1,17 @@
+from __future__ import annotations
 import numpy as np
 
 def softmax(x: np.ndarray, axis: int = -1) -> np.ndarray:
-   
+    """
+    Numerically stable softmax.
+
+    Args:
+        x: input array
+        axis: dimension along which to apply softmax (for this lab: rows => axis=1)
+
+    Returns:
+        softmax(x) along the specified axis, same shape as x.
+    """
     x = np.asarray(x, dtype=np.float64) 
     x_max = np.max(x, axis=axis, keepdims=True)
     exp = np.exp(x - x_max)
@@ -15,7 +25,21 @@ def scaled_dot_product_attention(
     *,
     return_weights: bool = True,
 ) -> tuple[np.ndarray, np.ndarray] | np.ndarray:
-   
+    """
+    Computes Scaled Dot-Product Attention.
+
+    Shapes:
+        Q: (n_q, d_k)
+        K: (n_k, d_k)
+        V: (n_k, d_v)
+
+    Returns:
+        output: (n_q, d_v)
+        weights (optional): (n_q, n_k) attention distribution per query (rows sum to 1)
+
+    Notes:
+        - Softmax MUST be applied row-wise on the score matrix S = Q K^T / sqrt(d_k).
+    """
 
     Q = np.asarray(Q, dtype=np.float64)
     K = np.asarray(K, dtype=np.float64)
