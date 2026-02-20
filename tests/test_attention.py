@@ -30,3 +30,27 @@ def test_prefers_more_aligned_key():
     assert w[0, 0] > w[0, 1]
     # output should be closer to the first value vector
     assert out[0, 0] > out[0, 1]
+
+def test_numeric_example_matches_expected():
+    # Simple, hand-checkable example
+    Q = np.array([[1.0, 0.0],
+                  [0.0, 1.0]])
+    K = np.array([[1.0, 0.0],
+                  [0.0, 1.0]])
+    V = np.array([[10.0, 0.0],
+                  [0.0, 20.0]])
+
+    out, w = scaled_dot_product_attention(Q, K, V)
+
+    # scores = [[1,0],[0,1]] / sqrt(2)
+    s = 1 / np.sqrt(2)
+    # softmax([s,0]) and softmax([0,s]) are symmetric
+    a = np.exp(s) / (np.exp(s) + 1.0)
+    b = 1.0 / (np.exp(s) + 1.0)
+
+    expected_w = np.array([[a, b],
+                           [b, a]])
+    expected_out = expected_w @ V
+
+    assert np.allclose(w, expected_w, atol=1e-9)
+    assert np.allclose(out, expected_out, atol=1e-9)
