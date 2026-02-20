@@ -50,3 +50,16 @@ def scaled_dot_product_attention(
     output = weights @ V
 
     return (output, weights) if return_weights else output
+
+if __name__ == "__main__":
+    Q = np.array([[1.0, 0.0],
+                  [0.0, 1.0]])
+    K = np.array([[1.0, 0.0],
+                  [0.0, 1.0]])
+    V = np.array([[10.0, 0.0],
+                  [0.0, 20.0]])
+
+    out, w = scaled_dot_product_attention(Q, K, V)
+    np.set_printoptions(precision=6, suppress=True)
+    print("Attention weights:\n", w)
+    print("Output:\n", out)
